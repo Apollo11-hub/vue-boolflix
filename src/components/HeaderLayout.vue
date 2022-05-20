@@ -15,6 +15,7 @@
 
 export default {
   name: "HeaderLayout",
+
   data() {
     return {
         searchBarText:"",

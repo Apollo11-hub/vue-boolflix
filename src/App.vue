@@ -4,6 +4,8 @@
     @searchedText="userSearchedText"
     />
     <MainLayout
+    :selectedMovieArray="selectedMovieArray"
+    :selectedTvShowArray="selectedTvShowArray"
     />
 
   </div>
@@ -45,7 +47,6 @@ export default {
         params: this.paramsData
       })
       .then(res =>{
-
         res.data.results.forEach(data =>{
         if(data.media_type === 'movie'){
           this.selectedMovieArray.push(data);
@@ -57,7 +58,7 @@ export default {
         console.log(this.selectedTvShowArray)
       })
       .catch(error =>{
-        console.log(error);
+        console.log("error----->" , error.message);
       })
 
 
@@ -66,6 +67,8 @@ export default {
     userSearchedText(inputText){
       this.paramsData.query = inputText;
       this.requestApi()
+      this.selectedMovieArray = []
+      this.selectedTvShowArray = []
       console.log('--->' , inputText);
     }
 
