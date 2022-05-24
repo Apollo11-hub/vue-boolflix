@@ -1,9 +1,20 @@
 <template>
   <div class="main-container">
 
+    <h1 v-if="trendOnOff">Nuovi e Popolari:</h1>
+
+<vueper-slides v-else
+  class="no-shadow"
+  :visible-slides="3"
+  slide-multiple
+  :gap="3"
+  :slide-ratio="1 / 4"
+  :dragging-distance="200"
+  :breakpoints="{ 800: { visibleSlides: 2, slideMultiple: 2 } }">
+  <vueper-slide v-for="i in 10" :key="i" :title="i.toString()" />
+</vueper-slides>
 
     <!-- TREND CARD -->
-    <h1 v-if="trendOnOff">Nuovi e Popolari:</h1>
     <div
     v-if="trendOnOff"
     class="card-container">

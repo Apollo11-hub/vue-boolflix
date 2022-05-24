@@ -5,9 +5,6 @@
     @serieOn="toggleSerie"
     @filmOn="toggleFilm"
     @trendOn="toggleTrend"
-    :selectedMovieArray="selectedMovieArray"
-    :selectedTvShowArray="selectedTvShowArray"
-    :landingArray="landingArray"
     />
     <MainLayout
     :selectedMovieArray="selectedMovieArray"
@@ -48,8 +45,8 @@ export default {
       selectedMovieArray:[],
       selectedTvShowArray:[],
       landingArray:[],
-      filmOnOff:false,
-      serieOnOff:false,
+      filmOnOff:undefined,
+      serieOnOff:undefined,
       trendOnOff:true,
 
     }
@@ -87,6 +84,12 @@ export default {
       // this.trendOnOff = false,
       this.requestApi('movie')
       this.requestApi('tv')
+      this.filmOnOff = true;
+      this.serieOnOff = true;
+      this.trendOnOff = false
+      console.log('emitflim' , this.filmOnOff);
+      console.log('emitserie' , this.serieOnOff);
+      console.log('emitrend' , this.trendOnOff);
       console.log('--->' , inputText);
     },
 

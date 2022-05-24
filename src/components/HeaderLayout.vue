@@ -24,11 +24,6 @@
 
 export default {
   name: "HeaderLayout",
-  props:{
-    selectedTvShowArray: Array,
-    selectedMovieArray: Array,
-    landingArray:Array,
-  },
 
   data() {
     return {
@@ -46,26 +41,19 @@ export default {
 
     functionToggleFilm(){
       this.toggleFilm =! this.toggleFilm
-      if(this.selectedMovieArray.length > 0){
-        this.toggleFilm = true
-      }
       this.$emit('filmOn', this.toggleFilm)
       },
 
 
     functionToggleSeries(){
       this.toggleSerie = !this.toggleSerie
-      if(this.selectedTvShowArray.length > 0){
-        this.toggleSerie = true
-      }
       this.$emit('serieOn', this.toggleSerie)
     },
 
 
     functionToggleTrend(){
       this.toggleTrend =! this.toggleTrend
-      if(this.selectedTvShowArray.length > 0 && this.selectedMovieArray.length > 0 )
-        this.toggleTrend = false
+
       this.$emit('trendOn', this.toggleTrend)
     }
 
