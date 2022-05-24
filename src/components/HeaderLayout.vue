@@ -1,8 +1,17 @@
 <template>
   <div class="header-container">
-    <div class="logo"></div>
+    <div class="logo-option-container">
+      <div class="logo">
+        <img src="https://fontmeme.com/permalink/220524/f340ba250fcd93dcce45f894facc6b93.png" alt="">
+      </div>
+      <div class="option">
+        <span @click="functionToggleFilm()" :class="toggleFilm ? 'active-red' : ''">Film</span>
+        <span @click="functionToggleSeries()" :class="toggleSerie ? 'active-red' : ''">Serie</span>
+        <span @click="functionToggleTrend()" :class="toggleTrend ? 'active-red' : ''">Nuovi e Popolari</span>
+      </div>
+    </div>
     <div class="search-bar-container">
-      <input 
+      <input
       v-model="searchBarText"
       @keyup.enter="sentTextFunction()"
       class="search-bar" type="search" placeholder="Cerca qui tra tutti i titoli">
@@ -15,18 +24,52 @@
 
 export default {
   name: "HeaderLayout",
+  props:{
+    selectedTvShowArray: Array,
+    selectedMovieArray: Array,
+    landingArray:Array,
+  },
 
   data() {
     return {
         searchBarText:"",
+        toggleFilm:undefined,
+        toggleSerie:undefined,
+        toggleTrend:true
     }
   },
   methods: {
     sentTextFunction(){
       this.$emit('searchedText', this.searchBarText.toLowerCase());
       this.searchBarText = ''
+    },
 
+    functionToggleFilm(){
+      this.toggleFilm =! this.toggleFilm
+      if(this.selectedMovieArray.length > 0){
+        this.toggleFilm = true
+      }
+      this.$emit('filmOn', this.toggleFilm)
+      },
+
+
+    functionToggleSeries(){
+      this.toggleSerie = !this.toggleSerie
+      if(this.selectedTvShowArray.length > 0){
+        this.toggleSerie = true
+      }
+      this.$emit('serieOn', this.toggleSerie)
+    },
+
+
+    functionToggleTrend(){
+      this.toggleTrend =! this.toggleTrend
+      if(this.selectedTvShowArray.length > 0 && this.selectedMovieArray.length > 0 )
+        this.toggleTrend = false
+      this.$emit('trendOn', this.toggleTrend)
     }
+
+
   },
 };
 </script>
@@ -37,11 +80,32 @@ export default {
   .header-container{
     display: flex;
     justify-content: space-between;
-    .logo{
-      width: 100px;
+    .logo-option-container{
+      display:flex;
+      .logo{
+      display:flex;
+      align-content:flex-end;
+      width: 300px;
       height: 100px;
-      background-color: white;
+      img{ 
+        margin-top: 10px;
+        width: 100%;
+      }
     }
+    .option{
+      display: flex;
+      align-items: flex-end;
+      color: white;
+      span{
+        margin: 0 20px;
+        &:hover{
+          cursor: pointer;
+          color:#e50914;
+        }
+
+      }
+    }
+  }
     .search-bar-container{
       @include center;
       .search-bar{
@@ -55,7 +119,7 @@ export default {
         resize: none;
         outline: none;
       }
-      
+
       .noselect {
         -webkit-touch-callout: none;
         -webkit-user-select: none;

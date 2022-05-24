@@ -2,10 +2,20 @@
   <div>
     <HeaderLayout
     @searchedText="userSearchedText"
+    @serieOn="toggleSerie"
+    @filmOn="toggleFilm"
+    @trendOn="toggleTrend"
+    :selectedMovieArray="selectedMovieArray"
+    :selectedTvShowArray="selectedTvShowArray"
+    :landingArray="landingArray"
     />
     <MainLayout
     :selectedMovieArray="selectedMovieArray"
     :selectedTvShowArray="selectedTvShowArray"
+    :landingArray="landingArray"
+    :filmOnOff="filmOnOff"
+    :serieOnOff="serieOnOff"
+    :trendOnOff="trendOnOff"
     />
 
   </div>
@@ -24,53 +34,76 @@ export default {
   },
 
   mounted() {
+    this.requestApi()
   },
 
   data() {
     return {
-      baseUrl:'https://api.themoviedb.org/3/search/multi',
+      baseUrl:'https://api.themoviedb.org/3/search/',
       paramsData:{
         api_key:'0f1363d87e909d71f74133f0ac8e1f7c',
         language: 'it-IT',
         query: ''
       },
       selectedMovieArray:[],
-      selectedTvShowArray:[]
-      
+      selectedTvShowArray:[],
+      landingArray:[],
+      filmOnOff:false,
+      serieOnOff:false,
+      trendOnOff:true,
 
     }
   },
 
   methods: {
-    requestApi(){
-      axios.get(this.baseUrl,{
-        params: this.paramsData
-      })
-      .then(res =>{
-        res.data.results.forEach(data =>{
-        if(data.media_type === 'movie'){
-          this.selectedMovieArray.push(data);
-        }else if (data.media_type ==='tv'){
-          this.selectedTvShowArray.push(data)
-        }
+    requestApi(type = ''){
+      const landingPage ="https://api.themoviedb.org/3/trending/all/day?api_key=0f1363d87e909d71f74133f0ac8e1f7c"
+      if(type === ''){
+        axios.get(landingPage).then(res =>{
+          this.landingArray = res.data.results
+          console.log('landing' , this.landingArray);
         })
-        console.log(this.selectedMovieArray)
-        console.log(this.selectedTvShowArray)
-      })
+      }else{
+        axios.get(this.baseUrl + type ,{
+          params:this.paramsData
+        })
+        .then(res =>{
+          if (type === 'movie') {
+            this.selectedMovieArray = res.data.results
+          }else if(type === 'tv'){
+            this.selectedTvShowArray = res.data.results
+          }
+        })
+        
       .catch(error =>{
         console.log("error----->" , error.message);
       })
 
-
-    },
+  } 
+},
 
     userSearchedText(inputText){
       this.paramsData.query = inputText;
-      this.requestApi()
-      this.selectedMovieArray = []
-      this.selectedTvShowArray = []
+      // this.trendOnOff = false,
+      this.requestApi('movie')
+      this.requestApi('tv')
       console.log('--->' , inputText);
-    }
+    },
+
+    toggleSerie(parametro){
+      this.filmOnOff = parametro
+      console.log('Film', this.filmOnOff);
+    },
+
+    toggleFilm(parametr){
+      this.serieOnOff = parametr
+      console.log('Serie' , this.serieOnOff);
+    },
+
+    toggleTrend(paramet){
+      this.trendOnOff = paramet
+      console.log('trend' , this.trendOnOff);
+    },
 
   },
   
@@ -78,6 +111,9 @@ export default {
 </script>
 
 <style lang="scss">
-@import './assets/general'
+@import './assets/general';
+h1{
+  color:white;
+}
 
 </style>

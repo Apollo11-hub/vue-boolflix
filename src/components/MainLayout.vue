@@ -1,63 +1,90 @@
 <template>
   <div class="main-container">
-    <div class="film-container">
-      <h1> Risultati Film </h1>
-      <ul v-for="movie in selectedMovieArray" :key="`movie-${movie.id}`">
-        <li><img :src="`https://image.tmdb.org/t/p/w200${movie.poster_path}`" :alt="movie.title"></li>
-        <li>{{movie.title}}</li>
-        <li>{{movie.original_title}}</li>
-        <li>{{movie.original_language}}</li>
-        <li>{{movie.vote_average}}</li>
-      </ul>
+
+
+    <!-- TREND CARD -->
+    <h1 v-if="trendOnOff">Nuovi e Popolari:</h1>
+    <div
+    v-if="trendOnOff"
+    class="card-container">
+      <MainCard
+        v-for="option in landingArray"
+        :key="`data-${option.id}`"
+        :option="option"
+      />
     </div>
-    <div class="serie-container">
-      <h1> Risultati Serie </h1>
-      <ul v-for="serie in selectedTvShowArray" :key="`movie-${serie.id}`">
-        <li><img :src="`https://image.tmdb.org/t/p/w200${serie.poster_path}`" :alt="serie.name"></li>
-        <li>{{serie.name}}</li>
-        <li>{{serie.original_name}}</li>
-        <li>{{serie.original_language}}</li>
-        <li>{{serie.vote_average}}</li>
-      </ul>
+
+    <!-- FILM CARD -->
+    <h1 v-if="serieOnOff">Risultati Film:</h1>
+    <div
+    v-if="serieOnOff "
+    class="card-container">
+      <MainCard
+        v-for="option in selectedMovieArray"
+        :key="`data-${option.id}`"
+        :option="option"
+      />
+    </div> 
+
+    <!-- SERIE CARD -->
+    <h1 v-if="filmOnOff">Risultati Serie Tv:</h1>
+    <div
+    v-if="filmOnOff"
+    class="card-container">
+      <MainCard
+        v-for="option in selectedTvShowArray"
+        :key="`data-${option.id}`"
+        :option="option"
+      />
+    </div>
+    <!-- NESSUN FILTRO IMPOSTATO -->
+    <div v-else-if="!filmOnOff && !serieOnOff && !trendOnOff">
+      <p>Seleziona un filtro <br>Oppure<br> Ricerca un contenuto</p>
     </div>
   </div>
 </template>
-  
+
 <script>
-
-
+import MainCard from "./MainComponent/MainCard.vue";
+// import { VueperSlides, VueperSlide } from 'vueperslides'
+import 'vueperslides/dist/vueperslides.css'
 
 export default {
-  name:'MainLayout',
-  props:{
-    selectedTvShowArray : Array,
-    selectedMovieArray : Array
+  name: "MainLayout",
+  components: {
+    MainCard,
+    // VueperSlides, VueperSlide
   },
-  mounted() {
-
-  },
-
-
-  data() {
-    return {
-
-    }
+  props: {
+    selectedTvShowArray: Array,
+    selectedMovieArray: Array,
+    landingArray:Array,
+    filmOnOff:Boolean,
+    serieOnOff:Boolean,
+    trendOnOff:Boolean
   },
 
-  methods: {
-
-  },
 }
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/general';
-@import '../assets/mixin';
-.main-container{
-  display: flex;
-  h1 , ul , li{
-  color:white;
-  
+@import "../assets/general";
+@import "../assets/mixin";
+.main-container {
+  padding: 50px;
+  height: calc(100vh - 100px);
+  overflow: scroll;
+  color: white;
+  h1{
+    margin-bottom: 20px;
+  }
+  p{
+    @include center;
+    font-size: 75px;
+  }
+  .card-container{
+    display:flex;
+
   }
 }
 </style>
